@@ -1,0 +1,33 @@
+diff --git a/teleop/utils/episode_writer.py b/teleop/utils/episode_writer.py
+index 2ca4dd1..750ecb8 100644
+--- a/teleop/utils/episode_writer.py
++++ b/teleop/utils/episode_writer.py
+@@ -169,6 +169,10 @@ class EpisodeWriter():
+         # Save images
+         if colors:
+             for idx_color, (color_key, color) in enumerate(colors.items()):
++                if color is None or not isinstance(color, np.ndarray):
++                    logger_mp.warning(f"Skip invalid color frame: key={color_key}, type={type(color)}")
++                    item_data['colors'][color_key] = None
++                    continue
+                 color_name = f'{str(idx).zfill(6)}_{color_key}.jpg'
+                 if not cv2.imwrite(os.path.join(self.color_dir, color_name), color):
+                     logger_mp.info(f"Failed to save color image.")
+@@ -177,6 +181,10 @@ class EpisodeWriter():
+         # Save depths
+         if depths:
+             for idx_depth, (depth_key, depth) in enumerate(depths.items()):
++                if depth is None or not isinstance(depth, np.ndarray):
++                    logger_mp.warning(f"Skip invalid depth frame: key={depth_key}, type={type(depth)}")
++                    item_data['depths'][depth_key] = None
++                    continue
+                 depth_name = f'{str(idx).zfill(6)}_{depth_key}.jpg'
+                 if not cv2.imwrite(os.path.join(self.depth_dir, depth_name), depth):
+                     logger_mp.info(f"Failed to save depth image.")
+@@ -230,4 +238,4 @@ class EpisodeWriter():
+         while not self.is_available:
+             time.sleep(0.01)
+         self.stop_worker = True
+-        self.worker_thread.join()
+\ No newline at end of file
++        self.worker_thread.join()

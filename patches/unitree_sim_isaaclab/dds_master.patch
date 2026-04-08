@@ -1,0 +1,29 @@
+diff --git a/dds/dds_master.py b/dds/dds_master.py
+index 2e500dd..ed641f3 100644
+--- a/dds/dds_master.py
++++ b/dds/dds_master.py
+@@ -2,6 +2,7 @@
+ # License: Apache License, Version 2.0
+ import time
+ import threading
++import os
+ from typing import Dict, List, Optional
+ from unitree_sdk2py.core.channel import ChannelFactoryInitialize
+ from dds.dds_base import DDSObject
+@@ -57,7 +58,15 @@ class DDSManager:
+             return True
+         
+         try:
+-            ChannelFactoryInitialize(1)
++            # Optional: force DDS to bind a specific NIC for multi-interface hosts.
++            # Example:
++            #   export UNITREE_DDS_NETWORK_INTERFACE=wlx6c1ff7877849
++            dds_iface = os.environ.get("UNITREE_DDS_NETWORK_INTERFACE")
++            if dds_iface:
++                print(f"[DDSManager] initializing DDS on interface: {dds_iface}")
++                ChannelFactoryInitialize(1, networkInterface=dds_iface)
++            else:
++                ChannelFactoryInitialize(1)
+             self.dds_initialized = True
+             print("[DDSManager] DDS system initialized")
+             return True

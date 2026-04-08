@@ -1,0 +1,30 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Build / logs / temp
+*.log
+*.tmp
+*.swp
+
+# IDE
+.vscode/
+.idea/
+
+# Runtime data
+xr_teleoperate/teleop/utils/data/
+unitree_sim_isaaclab/assets/
+!unitree_sim_isaaclab/assets/README_ASSETS.md
+
+# Local cert private keys (do not commit)
+**/key.pem
+**/cert.pem
+**/rootCA.*
+**/server.csr
+**/server_ext.cnf
+
+# Conda / local dependencies
+miniforge3/
+IsaacLab/
+cyclonedds/

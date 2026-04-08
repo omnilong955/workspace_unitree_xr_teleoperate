@@ -1,0 +1,23 @@
+diff --git a/teleop/teleop_hand_and_arm.py b/teleop/teleop_hand_and_arm.py
+index 8cafba3..24bc418 100644
+--- a/teleop/teleop_hand_and_arm.py
++++ b/teleop/teleop_hand_and_arm.py
+@@ -403,7 +403,10 @@ if __name__ == '__main__':
+                                 logger_mp.warning("Right wrist image is None!")
+                     else:
+                         if head_img is not None:
+-                            colors[f"color_{0}"] = head_img
++                            if hasattr(head_img, "bgr") and head_img.bgr is not None:
++                                colors[f"color_{0}"] = head_img.bgr
++                            else:
++                                logger_mp.warning(f"Head image has invalid type in monocular mode: {type(head_img)}")
+                         else:
+                             logger_mp.warning("Head image is None!")
+                         if camera_config['left_wrist_camera']['enable_zmq']:
+@@ -528,4 +531,4 @@ if __name__ == '__main__':
+         except Exception as e:
+             logger_mp.error(f"Failed to close recorder: {e}")
+         logger_mp.info("✅ Finally, exiting program.")
+-        exit(0)
+\ No newline at end of file
++        exit(0)
